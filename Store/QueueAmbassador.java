@@ -21,13 +21,7 @@ public class QueueAmbassador extends QueueBasedAmbassador {
     public void receiveInteraction(String interactionName, ReceivedInteraction theInteraction) {
         switch (interactionName) {
             case "serving_complete":
-                try {
-                    int customerId = EncodingHelpers.decodeInt(theInteraction.getValue(1));
-                    removeCustomer(customerId);
-                    isServed = false;
-                } catch (ArrayIndexOutOfBounds e) {
-                    throw new RuntimeException(e);
-                }
+                isServed = false;
                 break;
             case "payment_failure":
                 isOpen = false;
@@ -49,6 +43,7 @@ public class QueueAmbassador extends QueueBasedAmbassador {
                 } catch (ArrayIndexOutOfBounds e) {
                     throw new RuntimeException(e);
                 }
+                break;
         }
     }
 
@@ -67,7 +62,8 @@ public class QueueAmbassador extends QueueBasedAmbassador {
     }
 
     public void removeCustomer(Integer id) {
-        privilegedCustomerIds.removeIf(cId -> Objects.equals(cId, id));
-        customerIds.removeIf(cId -> Objects.equals(cId, id));
+        privilegedCustomerIds.removeIf(cId -> cId == id);
+        customerIds.removeIf(cId -> cId == id);
+        System.out.println();
     }
 }

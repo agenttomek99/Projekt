@@ -10,7 +10,7 @@ public class CashierAmbassador extends QueueBasedAmbassador {
     public enum Status {FREE, SERVING, REQUEST_PAYMENT, WAITING_FOR_PAYMENT, PAYMENT_COMPLETE, TERMINAL_FAILURE, RESTARTING_TERMINAL}
 
     public Status status = FREE;
-    int served_customer_id;
+    int servedCustomerId;
 
     CashierAmbassador(int queueId) {
         super(queueId);
@@ -21,18 +21,17 @@ public class CashierAmbassador extends QueueBasedAmbassador {
         switch (interactionName) {
             case "service_request":
                 try {
-                    served_customer_id = EncodingHelpers.decodeInt(theInteraction.getValue(0));
+                    int customerId = EncodingHelpers.decodeInt(theInteraction.getValue(1));
+                    servedCustomerId = customerId;
                     status = SERVING;
-                    break;
                 } catch (ArrayIndexOutOfBounds e) {
-                    throw new RuntimeException(e);
+//                    throw new RuntimeException(e);
                 }
+                break;
             case "payment_complete":
-                served_customer_id = -1;
-                status = FREE;
+                status = PAYMENT_COMPLETE;
                 break;
             case "payment_failure":
-                served_customer_id = -1;
                 status = TERMINAL_FAILURE;
                 break;
         }

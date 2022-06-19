@@ -1,7 +1,5 @@
 package hla13.Store;
 
-import hla.rti.EventRetractionHandle;
-import hla.rti.LogicalTime;
 import hla.rti.ReceivedInteraction;
 
 import static hla13.Store.TerminalAmbassador.Status.FREE;
@@ -13,10 +11,8 @@ public class TerminalAmbassador extends QueueBasedAmbassador {
     }
 
     public enum Status {PROCESSING, FREE, COMPLETE}
-    public Status status = FREE;
 
-    public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle) {
-    }
+    public Status status = FREE;
 
     @Override
     public void receiveInteraction(String interactionName, ReceivedInteraction theInteraction) {

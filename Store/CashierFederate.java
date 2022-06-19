@@ -42,17 +42,20 @@ public class CashierFederate extends Federate {
                 advanceTime(getServingDelay());
                 break;
             case REQUEST_PAYMENT:
-                sendInteraction("request_payment", queueId);
                 cashierAmbassador.status = WAITING_FOR_PAYMENT;
+                sendInteraction("request_payment", queueId);
                 advanceTime(timeStep);
                 break;
             case PAYMENT_COMPLETE:
                 cashierAmbassador.status = FREE;
-                sendInteraction("serving_complete", queueId, cashierAmbassador.served_customer_id);
+                sendInteraction("serving_complete", queueId, cashierAmbassador.servedCustomerId);
+                cashierAmbassador.servedCustomerId = -1;
+                advanceTime(timeStep);
                 break;
             case TERMINAL_FAILURE:
-                sendInteraction("terminal_failure", queueId);
                 cashierAmbassador.status = RESTARTING_TERMINAL;
+                sendInteraction("terminal_failure", queueId);
+                cashierAmbassador.servedCustomerId = -1;
                 advanceTime(TERMINAL_RESTART_DELAY);
                 break;
         }

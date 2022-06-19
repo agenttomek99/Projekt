@@ -82,6 +82,7 @@ public class StoreFederate extends Federate {
                 sendInteraction("join_queue", assignedQueueId, customerId);
             }
         }
+        storeAmbassador.customersWaiting.clear();
 
         // limiting the amount of incoming customers
         if (new Random().nextFloat() > NEW_CUSTOMER_RATE) return;

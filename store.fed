@@ -28,6 +28,7 @@
                 (parameter 0)
             (class service_request reliable timestamp
                 (parameter 0)
+                (parameter 1)
             (class join_queue reliable timestamp
                 (parameter 0)
                 (parameter 0)

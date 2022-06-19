@@ -11,7 +11,7 @@ import static hla13.Store.TerminalAmbassador.Status.FREE;
 
 public class TerminalFederate extends Federate {
     private TerminalAmbassador terminalAmbassador;
-    private final double PROCESSING_PAYMENT_DELAY = 1.0d;
+    private final double PROCESSING_PAYMENT_DELAY = 10.0d;
     private final double FAILURE_RATE = 0.0d;
     private int queueId;
 
@@ -29,7 +29,7 @@ public class TerminalFederate extends Federate {
     protected void tick() throws RTIexception, InvalidAttributeValueException {
         switch (terminalAmbassador.status) {
             case COMPLETE:
-                String paymentStatus = new Random().nextFloat() > FAILURE_RATE ? "payment_failure" : "payment_complete";
+                String paymentStatus = new Random().nextFloat() < FAILURE_RATE ? "payment_failure" : "payment_complete";
                 terminalAmbassador.status = FREE;
                 sendInteraction(paymentStatus, queueId);
             case FREE:
@@ -37,7 +37,7 @@ public class TerminalFederate extends Federate {
                 break;
             case PROCESSING:
                 terminalAmbassador.status = COMPLETE;
-                advanceTime(PROCESSING_PAYMENT_DELAY);
+                advanceTime(timeStep);
                 break;
         }
     }
@@ -49,7 +49,8 @@ public class TerminalFederate extends Federate {
     @Override
     protected void publishAndSubscribe() throws RTIexception {
         publishAndSubscribe(new String[]{
-                "payment_failure"
+                "payment_failure",
+                "payment_complete"
         }, new String[]{
                 "request_payment",
         });

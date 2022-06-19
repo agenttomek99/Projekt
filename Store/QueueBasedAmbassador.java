@@ -15,14 +15,13 @@ public abstract class QueueBasedAmbassador extends Ambassador {
     }
 
     public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle) {
-        System.out.println("Received Interaction: " + interactionHandleMap.get(interactionClass));
         try {
             int queueId = EncodingHelpers.decodeInt(theInteraction.getValue(0));
             if (this.queueId == queueId) {
+                System.out.println(this.getClass().getSimpleName() + ": Received Interaction: " + interactionHandleMap.get(interactionClass));
                 receiveInteraction(interactionHandleMap.get(interactionClass), theInteraction);
             }
-        } catch (ArrayIndexOutOfBounds e) {
-            throw new RuntimeException(e);
+        } catch (ArrayIndexOutOfBounds ignored) {
         }
     }
 

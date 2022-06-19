@@ -25,13 +25,14 @@ public class CustomerAmbassador extends Ambassador {
                 receiveInteraction(interactionHandleMap.get(interactionClass), queueId);
             }
         } catch (ArrayIndexOutOfBounds e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
         }
     }
 
     public void receiveInteraction(String interactionName, int queueId) {
         switch (interactionName) {
-            case "payment_complete":
+            case "serving_complete":
+                System.out.println("Customer Finished Shopping");
                 running = false;
                 break;
             case "payment_failure":

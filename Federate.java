@@ -127,7 +127,7 @@ public abstract class Federate {
 
     protected void advanceTime(double timeStep) throws RTIexception {
 //        log("requesting time advance for: " + timeStep);
-        log("requesting time advance for newtime: " + (fedAmb.federateTime + timeStep));
+//        log("requesting time advance for newtime: " + (fedAmb.federateTime + timeStep));
 //        // request the advance
         fedAmb.isAdvancing = true;
         LogicalTime newTime = convertTime(fedAmb.federateTime + timeStep);

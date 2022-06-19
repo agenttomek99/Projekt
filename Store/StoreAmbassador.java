@@ -23,14 +23,21 @@ public class StoreAmbassador  extends Ambassador {
                 try {
                     int customerId = EncodingHelpers.decodeInt(theInteraction.getValue(0));
                     customersWaiting.add(customerId);
-                    break;
+                    System.out.println("StoreAmbassador: Received interaction: " + interactionHandleMap.get(interactionClass));
                 } catch (ArrayIndexOutOfBounds e) {
-                    throw new RuntimeException(e);
+//                    System.out.println("StoreAmbassador: Invalid interaction received:" + interactionHandleMap.get(interactionClass));
                 }
+                break;
             case "terminal_fixed":
             case "terminal_failure":
-                int queueId = new Random().nextInt(10);
-                queueMap.replace(queueId, interactionHandleMap.get(interactionClass).equals("terminal_fixed"));
+                int queueId = 0;
+                try {
+                    queueId = EncodingHelpers.decodeInt(theInteraction.getValue(0));
+                    queueMap.replace(queueId, interactionHandleMap.get(interactionClass).equals("terminal_fixed"));
+                    System.out.println("StoreAmbassador: Received interaction: " + interactionHandleMap.get(interactionClass));
+                } catch (ArrayIndexOutOfBounds e) {
+//                    throw new RuntimeException(e);
+                }
                 break;
         }
     }

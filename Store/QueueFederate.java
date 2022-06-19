@@ -26,7 +26,11 @@ public class QueueFederate extends Federate {
             return;
         }
         if (queueAmbassador.isOpen) {
-            sendInteraction("service_request", queueAmbassador.getNextCustomer());
+            int customerId = queueAmbassador.getNextCustomer();
+            if (customerId == -1) return;
+            queueAmbassador.removeCustomer(customerId);
+            sendInteraction("service_request", queueId, customerId);
+            advanceTime(timeStep);
         }
     }
     @Override
