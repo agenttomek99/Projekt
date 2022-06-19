@@ -6,20 +6,11 @@
         (space TestSpace
           (dimension TestDimension)
         )
-        (space OtherSpace
-          (dimension OtherDimension)
-        )
       )
 
     (objects
         (class ObjectRoot
             (attribute privilegeToDelete reliable timestamp)
-            (class RTIprivate)
-            (class A
-            (attribute aa reliable timestamp TestSpace) ;; more comments!
-            (attribute ab reliable timestamp TestSpace)
-            (attribute ac reliable timestamp TestSpace)
-            )
         )
     )
     (interactions
@@ -49,4 +40,3 @@
         )
     )
 )
-

@@ -94,6 +94,7 @@ public class StoreFederate extends Federate {
 //                throw new RuntimeException(e);
 //            }
 //        }).start();
+
     }
 
     /* returns list of queueId for which the terminal is registered to be working at the moment */

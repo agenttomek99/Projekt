@@ -7,10 +7,6 @@ import org.portico.impl.hla13.types.DoubleTime;
 import org.portico.impl.hla13.types.DoubleTimeInterval;
 
 import javax.management.InvalidAttributeValueException;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -65,7 +61,7 @@ public abstract class Federate {
     }
 
     protected void sendInteraction(String name, int[] attributes) throws InvalidAttributeValueException, RTIinternalError, FederateNotExecutionMember, InteractionParameterNotDefined, RestoreInProgress, InteractionClassNotDefined, ConcurrentAccessAttempted, InteractionClassNotPublished, SaveInProgress, InvalidFederationTime, NameNotFound {
-        System.out.println(getName()+ ": Sending Interaction: " + name);
+        System.out.println(getName() + ": Sending Interaction: " + name);
         SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
         int interactionHandle = rtiAmb.getInteractionClassHandle("InteractionRoot." + name);
 
@@ -78,7 +74,7 @@ public abstract class Federate {
             parameters.add(attrHandle, attrEncoded);
         }
 
-        LogicalTime time = convertTime(timeStep);
+        LogicalTime time = convertTime(fedAmb.federateTime + timeStep);
         rtiAmb.sendInteraction(interactionHandle, parameters, "tag".getBytes(), time);
     }
 

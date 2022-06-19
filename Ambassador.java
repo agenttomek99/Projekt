@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class Ambassador extends NullFederateAmbassador {
     public HashMap<Integer, String> interactionHandleMap;
     public double federateTime = 0.0;
-    public double federateLookahead = 1.0;
+    public double federateLookahead = 10.0;
 
     public boolean isRegulating = false;
     public boolean isConstrained = false;

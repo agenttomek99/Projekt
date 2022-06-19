@@ -27,15 +27,16 @@ public class CustomerFederate extends Federate {
     protected void tick() throws RTIexception, InvalidAttributeValueException {
         switch (customerAmbassador.status) {
             case SHOPPING:
-                advanceTime(getShoppingTime()*4);
+                advanceTime(getShoppingTime());
                 customerAmbassador.status = LOOKING_FOR_QUEUE;
                 break;
             case LOOKING_FOR_QUEUE:
                 sendInteraction("looking_for_queue", customerAmbassador.id);
                 customerAmbassador.status = WAITING_TO_JOIN_QUEUE;
+                break;
             case WAITING_TO_JOIN_QUEUE:
             case IN_QUEUE:
-                advanceTime(timeStep*4);
+                advanceTime(timeStep);
                 break;
         }
     }
