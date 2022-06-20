@@ -7,6 +7,7 @@ import javax.management.InvalidAttributeValueException;
 
 public class QueueFederate extends Federate {
     private QueueAmbassador queueAmbassador;
+
     private int queueId;
 
     public QueueFederate(int queueId) {
@@ -30,6 +31,7 @@ public class QueueFederate extends Federate {
             if (customerId == -1) return;
             queueAmbassador.removeCustomer(customerId);
             sendInteraction("service_request", queueId, customerId);
+            sendInteraction("information_call", queueId, queueAmbassador.getQueueLength());
             advanceTime(timeStep);
         }
     }
@@ -41,6 +43,7 @@ public class QueueFederate extends Federate {
     protected void publishAndSubscribe() throws RTIexception {
         publishAndSubscribe(new String[]{
                 "service_request",
+                "information_call",
         }, new String[]{
                 "serving_complete",
                 "payment_failure",

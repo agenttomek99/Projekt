@@ -4,7 +4,13 @@ import hla.rti.ArrayIndexOutOfBounds;
 import hla.rti.ReceivedInteraction;
 import hla.rti.jlc.EncodingHelpers;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Random;
 
@@ -19,6 +25,9 @@ public class QueueAmbassador extends QueueBasedAmbassador {
     }
 
     public void receiveInteraction(String interactionName, ReceivedInteraction theInteraction) {
+
+
+
         switch (interactionName) {
             case "serving_complete":
                 isServed = false;
@@ -43,6 +52,8 @@ public class QueueAmbassador extends QueueBasedAmbassador {
                 } catch (ArrayIndexOutOfBounds e) {
                     throw new RuntimeException(e);
                 }
+
+
                 break;
         }
     }
@@ -65,5 +76,9 @@ public class QueueAmbassador extends QueueBasedAmbassador {
         privilegedCustomerIds.removeIf(cId -> Objects.equals(cId, id));
         customerIds.removeIf(cId -> Objects.equals(cId, id));
         System.out.println();
+    }
+
+    public int getQueueLength(){
+        return customerIds.size() + privilegedCustomerIds.size();
     }
 }

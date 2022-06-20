@@ -37,7 +37,12 @@
             (class payment_complete reliable timestamp
                 (parameter 0)
                 (parameter 1)
-            )))))))))
+            (class information_call reliable timestamp
+                (parameter 0)
+                (parameter 1)
+
+
+            ))))))))))
         )
     )
 )
