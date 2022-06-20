@@ -62,8 +62,8 @@ public class QueueAmbassador extends QueueBasedAmbassador {
     }
 
     public void removeCustomer(Integer id) {
-        privilegedCustomerIds.removeIf(cId -> cId == id);
-        customerIds.removeIf(cId -> cId == id);
+        privilegedCustomerIds.removeIf(cId -> Objects.equals(cId, id));
+        customerIds.removeIf(cId -> Objects.equals(cId, id));
         System.out.println();
     }
 }

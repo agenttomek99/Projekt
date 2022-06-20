@@ -33,7 +33,7 @@ public class CustomerAmbassador extends Ambassador {
         switch (interactionName) {
             case "serving_complete":
                 System.out.println("Customer Finished Shopping");
-                running = false;
+//                running = false;
                 break;
             case "payment_failure":
                 if (this.queueId == queueId) {

@@ -55,7 +55,7 @@ public class CustomerFederate extends Federate {
         publishAndSubscribe(new String[]{
                 "looking_for_queue",
         }, new String[]{
-                "payment_complete",
+                "serving_complete",
                 "payment_failure",
                 "join_queue"
         });

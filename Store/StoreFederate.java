@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class StoreFederate extends Federate {
     public int COUNT_QUEUES = 1;
-    private final double NEW_CUSTOMER_RATE = 0.01;
+    private final double NEW_CUSTOMER_RATE = 0.1;
     private int customerCount = 0;
     private StoreAmbassador storeAmbassador;
 
@@ -62,6 +62,14 @@ public class StoreFederate extends Federate {
                     throw new RuntimeException(e);
                 }
             }).start();
+            CustomerFederate customerFederate2 = new CustomerFederate(++customerCount);
+            new Thread(() -> {
+                try {
+                    customerFederate2.runFederate();
+                } catch (RTIexception | InvalidAttributeValueException e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
         }
     }
 
@@ -87,14 +95,14 @@ public class StoreFederate extends Federate {
         // limiting the amount of incoming customers
         if (new Random().nextFloat() > NEW_CUSTOMER_RATE) return;
 
-//        CustomerFederate customerFederate = new CustomerFederate(++customerCount);
-//        new Thread(() -> {
-//            try {
-//                customerFederate.runFederate();
-//            } catch (RTIexception | InvalidAttributeValueException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }).start();
+        CustomerFederate customerFederate = new CustomerFederate(++customerCount);
+        new Thread(() -> {
+            try {
+                customerFederate.runFederate();
+            } catch (RTIexception | InvalidAttributeValueException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
 
     }
 
