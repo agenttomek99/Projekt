@@ -1,44 +1,34 @@
 package hla13.Store;
 
-import hla.rti.*;
+import hla.rti.ArrayIndexOutOfBounds;
+import hla.rti.ReceivedInteraction;
 import hla.rti.jlc.EncodingHelpers;
 
-public class StatisticsAmbassador extends QueueBasedAmbassador {
+public class GuiAmbassador extends QueueBasedAmbassador{
 
-    StatisticsAmbassador(int queueId) {
-        super(queueId);
-    }
     private int averageQueueLength;
     private int peopleInQueue;
     private int queueId;
 
-
-
+    GuiAmbassador(int queueId) {
+        super(queueId);
+    }
 
     @Override
     public void receiveInteraction(String interactionName, ReceivedInteraction theInteraction) {
-        if (interactionName.equals("information_call"))
+        if (interactionName.equals("display_call"))
             try {
                 this.queueId = EncodingHelpers.decodeInt(theInteraction.getValue(0));
                 this.peopleInQueue = EncodingHelpers.decodeInt(theInteraction.getValue(1));
                 this.averageQueueLength = EncodingHelpers.decodeInt(theInteraction.getValue(2));
-                // log(String.valueOf(averageQueryLength));
-//                log("Hello from queue: " + queueId + ", currently: " + peopleInQueue + " people in the queue.");
+
+                if (peopleInQueue > 0 || averageQueueLength > 0){
+                    log("Hello from queue: " + queueId + ", currently: " + peopleInQueue + " people in the queue");
+                    log("Queue: " + queueId + ", average length: " + ((float)averageQueueLength)/100.0);
+                }
             } catch (ArrayIndexOutOfBounds e) {
 //          throw new RuntimeException(e);
                 log("ja pierdole wyjebalo sie");
             }
-    }
-
-    public int getPeopleInQueue() {
-        return peopleInQueue;
-    }
-
-    public int getQueueId() {
-        return queueId;
-    }
-
-    public int getAverageQueueLength() {
-        return averageQueueLength;
     }
 }

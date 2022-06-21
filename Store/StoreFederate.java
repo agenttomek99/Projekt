@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class StoreFederate extends Federate {
-    public int COUNT_QUEUES = 1;
-    private final double NEW_CUSTOMER_RATE = 0.1;
+    public int COUNT_QUEUES = 2;
+    private final double NEW_CUSTOMER_RATE = 0.2;
     private int customerCount = 0;
     private StoreAmbassador storeAmbassador;
 
@@ -26,13 +26,31 @@ public class StoreFederate extends Federate {
     }
 
     @Override
-    protected void initialize() throws RTIexception, InvalidAttributeValueException {
+    protected void initialize() {
         for (int queueId = 0; queueId < COUNT_QUEUES; queueId++) {
             storeAmbassador.queueMap.put(queueId, true);
             CashierFederate cashierFederate = new CashierFederate(queueId);
             QueueFederate queueFederate = new QueueFederate(queueId);
             TerminalFederate terminalFederate = new TerminalFederate(queueId);
             StatisticsFederate statisticsFederate = new StatisticsFederate(queueId);
+            GuiFederate guiFederate = new GuiFederate(queueId);
+            ApiFederate apiFederate = new ApiFederate(queueId);
+
+            new Thread(() -> {
+                try {
+                    guiFederate.runFederate();
+                } catch (RTIexception | InvalidAttributeValueException e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
+
+            new Thread(() -> {
+                try {
+                    apiFederate.runFederate();
+                } catch (RTIexception | InvalidAttributeValueException e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
 
             new Thread(() -> {
                 try {
@@ -41,7 +59,6 @@ public class StoreFederate extends Federate {
                     throw new RuntimeException(e);
                 }
             }).start();
-
             new Thread(() -> {
                 try {
                     cashierFederate.runFederate();
@@ -63,23 +80,6 @@ public class StoreFederate extends Federate {
                     throw new RuntimeException(e);
                 }
             }).start();
-            CustomerFederate customerFederate = new CustomerFederate(++customerCount);
-            new Thread(() -> {
-                try {
-                    customerFederate.runFederate();
-                } catch (RTIexception | InvalidAttributeValueException e) {
-                    throw new RuntimeException(e);
-                }
-            }).start();
-            CustomerFederate customerFederate2 = new CustomerFederate(++customerCount);
-            new Thread(() -> {
-                try {
-                    customerFederate2.runFederate();
-                } catch (RTIexception | InvalidAttributeValueException e) {
-                    throw new RuntimeException(e);
-                }
-            }).start();
-
         }
     }
 

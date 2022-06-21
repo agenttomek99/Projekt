@@ -17,6 +17,11 @@ public class CustomerAmbassador extends Ambassador {
     public int id;
     private boolean isPrivileged;
 
+    public CustomerAmbassador(int id) {
+        super();
+        this.id = id;
+    }
+
     public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle) {
         try {
             int customerId = EncodingHelpers.decodeInt(theInteraction.getValue(1));

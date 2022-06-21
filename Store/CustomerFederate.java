@@ -19,7 +19,7 @@ public class CustomerFederate extends Federate {
 
     @Override
     protected CustomerAmbassador createAmbassador() {
-        customerAmbassador = new CustomerAmbassador();
+        customerAmbassador = new CustomerAmbassador(id);
         return customerAmbassador;
     }
 

@@ -7,6 +7,7 @@ import org.portico.impl.hla13.types.DoubleTime;
 import org.portico.impl.hla13.types.DoubleTimeInterval;
 
 import javax.management.InvalidAttributeValueException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -61,9 +62,9 @@ public abstract class Federate {
     }
 
     protected void sendInteraction(String name, int[] attributes) throws InvalidAttributeValueException, RTIinternalError, FederateNotExecutionMember, InteractionParameterNotDefined, RestoreInProgress, InteractionClassNotDefined, ConcurrentAccessAttempted, InteractionClassNotPublished, SaveInProgress, InvalidFederationTime, NameNotFound {
-        System.out.println(getName() + ": Sending Interaction: " + name);
-        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
         int interactionHandle = rtiAmb.getInteractionClassHandle("InteractionRoot." + name);
+        System.out.println(getName() + ": Sending Interaction: " + name + " " + Arrays.toString(attributes));
+        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
 
         for (int i = 0; i < attributes.length; i++) {
             if (attributes[i] == -1) {
@@ -91,15 +92,15 @@ public abstract class Federate {
 
     protected void publishAndSubscribe(String[] toPublish, String[] toSubscribe) throws RTIexception {
         fedAmb.interactionHandleMap = new HashMap<>();
-        for (String interaction : toPublish) {
-            int interactionHandle = rtiAmb.getInteractionClassHandle("InteractionRoot." + interaction);
-            fedAmb.interactionHandleMap.put(interactionHandle, interaction);
+        for (String interactionName : toPublish) {
+            int interactionHandle = rtiAmb.getInteractionClassHandle("InteractionRoot." + interactionName);
+//            fedAmb.interactionHandleMap.put(interactionHandle, interactionName);
             rtiAmb.publishInteractionClass(interactionHandle);
         }
 
-        for (String interaction : toSubscribe) {
-            int interactionHandle = rtiAmb.getInteractionClassHandle("InteractionRoot." + interaction);
-            fedAmb.interactionHandleMap.put(interactionHandle, interaction);
+        for (String interactionName : toSubscribe) {
+            int interactionHandle = rtiAmb.getInteractionClassHandle("InteractionRoot." + interactionName);
+            fedAmb.interactionHandleMap.put(interactionHandle, interactionName);
             rtiAmb.subscribeInteractionClass(interactionHandle);
         }
     }

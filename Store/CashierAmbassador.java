@@ -21,11 +21,9 @@ public class CashierAmbassador extends QueueBasedAmbassador {
         switch (interactionName) {
             case "service_request":
                 try {
-                    int customerId = EncodingHelpers.decodeInt(theInteraction.getValue(1));
-                    servedCustomerId = customerId;
+                    servedCustomerId = EncodingHelpers.decodeInt(theInteraction.getValue(1));
                     status = SERVING;
-                } catch (ArrayIndexOutOfBounds e) {
-//                    throw new RuntimeException(e);
+                } catch (ArrayIndexOutOfBounds ignore) {
                 }
                 break;
             case "payment_complete":

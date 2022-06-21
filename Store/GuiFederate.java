@@ -1,33 +1,21 @@
 package hla13.Store;
 
-
 import hla.rti.RTIexception;
 import hla13.Federate;
 
 import javax.management.InvalidAttributeValueException;
 
-public class StatisticsFederate extends Federate {
-    private StatisticsAmbassador statisticsAmbassador;
-    private int queueId;
+public class GuiFederate extends Federate {
 
-    public StatisticsFederate(int queueId) {
+    private GuiAmbassador guiAmbassador;
+
+    public GuiFederate(int queueId) {
         this.queueId = queueId;
     }
 
-    @Override
-    protected StatisticsAmbassador createAmbassador() {
-        statisticsAmbassador = new StatisticsAmbassador(queueId);
-        return statisticsAmbassador;
-    }
-
+    private int queueId;
     @Override
     protected void tick() throws RTIexception, InvalidAttributeValueException {
-        int parameters[] = {
-                statisticsAmbassador.getQueueId(),
-                statisticsAmbassador.getPeopleInQueue(),
-                (int)(statisticsAmbassador.getAverageQueueLength())
-        };
-        sendInteraction("display_call", parameters);
         advanceTime(timeStep);
     }
     @Override
@@ -44,5 +32,9 @@ public class StatisticsFederate extends Federate {
                 "display_call"
         });
     }
+    @Override
+    protected GuiAmbassador createAmbassador(){
+        guiAmbassador = new GuiAmbassador(queueId);
+        return guiAmbassador;
+    }
 }
-

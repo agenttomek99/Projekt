@@ -7,8 +7,7 @@ import javax.management.InvalidAttributeValueException;
 
 public class QueueFederate extends Federate {
     private QueueAmbassador queueAmbassador;
-
-    private int queueId;
+    private final int queueId;
 
     public QueueFederate(int queueId) {
         this.queueId = queueId;
@@ -30,8 +29,14 @@ public class QueueFederate extends Federate {
             int customerId = queueAmbassador.getNextCustomer();
             if (customerId == -1) return;
             queueAmbassador.removeCustomer(customerId);
+            queueAmbassador.isServed = true;
             sendInteraction("service_request", queueId, customerId);
-            sendInteraction("information_call", queueId, queueAmbassador.getQueueLength());
+            int parameters[] = {
+                    queueId,
+                    queueAmbassador.getQueueLength(),
+                    (int)(queueAmbassador.getAverageQueueLength() * 100.0)
+            };
+            sendInteraction("information_call", parameters);
             advanceTime(timeStep);
         }
     }

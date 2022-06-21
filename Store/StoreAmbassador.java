@@ -18,23 +18,23 @@ public class StoreAmbassador  extends Ambassador {
     ArrayList<Integer> customersWaiting = new ArrayList<>();
 
     public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag, LogicalTime theTime, EventRetractionHandle eventRetractionHandle) {
-        switch (interactionHandleMap.get(interactionClass)) {
+        String interactionName = interactionHandleMap.get(interactionClass);
+        switch (interactionName) {
             case "looking_for_queue":
                 try {
                     int customerId = EncodingHelpers.decodeInt(theInteraction.getValue(0));
                     customersWaiting.add(customerId);
-                    System.out.println("StoreAmbassador: Received interaction: " + interactionHandleMap.get(interactionClass));
+                    System.out.println("StoreAmbassador: Received interaction: " + interactionName);
                 } catch (ArrayIndexOutOfBounds e) {
 //                    System.out.println("StoreAmbassador: Invalid interaction received:" + interactionHandleMap.get(interactionClass));
                 }
                 break;
             case "terminal_fixed":
             case "terminal_failure":
-                int queueId = 0;
                 try {
-                    queueId = EncodingHelpers.decodeInt(theInteraction.getValue(0));
-                    queueMap.replace(queueId, interactionHandleMap.get(interactionClass).equals("terminal_fixed"));
-                    System.out.println("StoreAmbassador: Received interaction: " + interactionHandleMap.get(interactionClass));
+                    int queueId = EncodingHelpers.decodeInt(theInteraction.getValue(0));
+                    queueMap.replace(queueId, interactionName.equals("terminal_fixed"));
+                    System.out.println("StoreAmbassador: Received interaction: " + interactionName);
                 } catch (ArrayIndexOutOfBounds e) {
 //                    throw new RuntimeException(e);
                 }
