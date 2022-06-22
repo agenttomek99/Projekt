@@ -10,6 +10,18 @@ public class GuiAmbassador extends QueueBasedAmbassador{
     private int peopleInQueue;
     private int queueId;
 
+    public int getAverageQueueLength() {
+        return averageQueueLength;
+    }
+
+    public int getPeopleInQueue() {
+        return peopleInQueue;
+    }
+
+    public int getQueueId() {
+        return queueId;
+    }
+
     GuiAmbassador(int queueId) {
         super(queueId);
     }
@@ -27,8 +39,7 @@ public class GuiAmbassador extends QueueBasedAmbassador{
                     log("Queue: " + queueId + ", average length: " + ((float)averageQueueLength)/100.0);
                 }
             } catch (ArrayIndexOutOfBounds e) {
-//          throw new RuntimeException(e);
-                log("ja pierdole wyjebalo sie");
+                throw new RuntimeException(e);
             }
     }
 }

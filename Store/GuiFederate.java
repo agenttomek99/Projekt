@@ -17,6 +17,12 @@ public class GuiFederate extends Federate {
     @Override
     protected void tick() throws RTIexception, InvalidAttributeValueException {
         advanceTime(timeStep);
+        int parameters[] = {
+                queueId,
+                guiAmbassador.getPeopleInQueue(),
+                guiAmbassador.getAverageQueueLength()
+        };
+        sendInteraction("api_call", parameters);
     }
     @Override
     protected String getName() {
@@ -25,11 +31,13 @@ public class GuiFederate extends Federate {
     @Override
     protected void publishAndSubscribe() throws RTIexception {
         publishAndSubscribe(new String[]{
-                "information_call",
-                "display_call"
+                //"information_call",
+                //"display_call",
+                "api_call"
         }, new String[]{
-                "information_call",
-                "display_call"
+                //"information_call",
+                "display_call",
+                //"api_call"
         });
     }
     @Override

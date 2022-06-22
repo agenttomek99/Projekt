@@ -36,7 +36,6 @@ public class QueueFederate extends Federate {
                     queueAmbassador.getQueueLength(),
                     (int)(queueAmbassador.getAverageQueueLength() * 100.0)
             };
-            sendInteraction("information_call", parameters);
             advanceTime(timeStep);
         }
     }

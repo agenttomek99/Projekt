@@ -3,42 +3,57 @@ package hla13.Store;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 
+import java.util.ArrayList;
+
 public class StatisticsAmbassador extends QueueBasedAmbassador {
 
     StatisticsAmbassador(int queueId) {
         super(queueId);
     }
-    private int averageQueueLength;
-    private int peopleInQueue;
-    private int queueId;
+
+    private ArrayList<Integer> queueLengthHistory = new ArrayList<>();
+
+    private int currentQueueLength = 0;
+
+    private boolean isTerminalWorking = true;
+
+    int time = 0;
 
 
 
 
     @Override
     public void receiveInteraction(String interactionName, ReceivedInteraction theInteraction) {
-        if (interactionName.equals("information_call"))
-            try {
-                this.queueId = EncodingHelpers.decodeInt(theInteraction.getValue(0));
-                this.peopleInQueue = EncodingHelpers.decodeInt(theInteraction.getValue(1));
-                this.averageQueueLength = EncodingHelpers.decodeInt(theInteraction.getValue(2));
-                // log(String.valueOf(averageQueryLength));
-//                log("Hello from queue: " + queueId + ", currently: " + peopleInQueue + " people in the queue.");
-            } catch (ArrayIndexOutOfBounds e) {
-//          throw new RuntimeException(e);
-                log("ja pierdole wyjebalo sie");
-            }
+        ++time;
+        if (interactionName.equals("terminal_failure")){
+            this.isTerminalWorking = false;
+            currentQueueLength = 0;
+            queueLengthHistory.add(new Integer(0));
+            log("Terminal failed");
+        }
+        if (interactionName.equals("terminal_fixed")){
+            this.isTerminalWorking = true;
+            log("Terminal fixed");
+        }
+        if (interactionName.equals("payment_complete") && isTerminalWorking){
+            currentQueueLength = currentQueueLength > 0 ? --currentQueueLength : 0;
+            queueLengthHistory.add(new Integer(currentQueueLength));
+        }
+        if (interactionName.equals("join_queue") && isTerminalWorking){
+            ++currentQueueLength;
+            queueLengthHistory.add(new Integer(currentQueueLength));
+        }
     }
 
     public int getPeopleInQueue() {
-        return peopleInQueue;
+        return currentQueueLength ;
     }
 
     public int getQueueId() {
         return queueId;
     }
 
-    public int getAverageQueueLength() {
-        return averageQueueLength;
+    public float getAverageQueueLength(){
+        return queueLengthHistory.size() == 0 ? 0 : ((float) queueLengthHistory.stream().mapToInt(n->n).sum() / (float) time);
     }
 }

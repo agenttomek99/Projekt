@@ -6,6 +6,8 @@ import org.portico.impl.hla13.types.DoubleTime;
 
 import java.util.HashMap;
 
+import static hla13.Federate.READY_TO_RUN;
+
 public class Ambassador extends NullFederateAmbassador {
     public HashMap<Integer, String> interactionHandleMap;
     public double federateTime = 0.0;
@@ -39,13 +41,13 @@ public class Ambassador extends NullFederateAmbassador {
 
     public void announceSynchronizationPoint(String label, byte[] tag) {
         log("Synchronization point announced: " + label);
-        if (label.equals(Example13Federate.READY_TO_RUN))
+        if (label.equals(READY_TO_RUN))
             this.isAnnounced = true;
     }
 
     public void federationSynchronized(String label) {
         log("Federation Synchronized: " + label);
-        if (label.equals(Example13Federate.READY_TO_RUN))
+        if (label.equals(READY_TO_RUN))
             this.isReadyToRun = true;
     }
 

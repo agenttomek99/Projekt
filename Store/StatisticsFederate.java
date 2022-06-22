@@ -23,9 +23,9 @@ public class StatisticsFederate extends Federate {
     @Override
     protected void tick() throws RTIexception, InvalidAttributeValueException {
         int parameters[] = {
-                statisticsAmbassador.getQueueId(),
+                queueId,
                 statisticsAmbassador.getPeopleInQueue(),
-                (int)(statisticsAmbassador.getAverageQueueLength())
+                (int)((statisticsAmbassador.getAverageQueueLength()*100.0))
         };
         sendInteraction("display_call", parameters);
         advanceTime(timeStep);
@@ -37,11 +37,20 @@ public class StatisticsFederate extends Federate {
     @Override
     protected void publishAndSubscribe() throws RTIexception {
         publishAndSubscribe(new String[]{
-                "information_call",
-                "display_call"
+                "display_call",
+                //"payment_failure",
+                //"payment_complete",
+                //"join_queue",
+                //"terminal_failure",
+                //"terminal_fixed",
         }, new String[]{
                 "information_call",
-                "display_call"
+                "display_call",
+                "payment_failure",
+                "payment_complete",
+                "join_queue",
+                "terminal_failure",
+                "terminal_fixed",
         });
     }
 }

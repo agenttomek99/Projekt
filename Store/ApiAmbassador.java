@@ -15,6 +15,8 @@ public class ApiAmbassador extends QueueBasedAmbassador{
     private int peopleInQueue;
     private int queueId;
 
+    private int averageQueueLength;
+
     ApiAmbassador(int queueId) {
         super(queueId);
     }
@@ -25,25 +27,22 @@ public class ApiAmbassador extends QueueBasedAmbassador{
             try {
                 this.queueId = EncodingHelpers.decodeInt(theInteraction.getValue(0));
                 this.peopleInQueue = EncodingHelpers.decodeInt(theInteraction.getValue(1));
-                String urlString = "http://localhost:5000/data/";
-                urlString += (this.queueId + this.peopleInQueue);
+                this.averageQueueLength = EncodingHelpers.decodeInt(theInteraction.getValue(2));
 
-                URL url = null;
-                try {
-                    url = new URL(urlString);
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                }
-                URLConnection conn = null;
-                try {
+                if (peopleInQueue > 0 && averageQueueLength > 0){
+                    String urlString = "http://localhost:5000/Qid:" + String.valueOf(queueId) + "/Now:" + String.valueOf(peopleInQueue)  + "/Avg:" + String.valueOf(averageQueueLength/100.0) ;
+                    URL url = new URL(urlString);
+                    URLConnection conn = url.openConnection();
                     InputStream is = conn.getInputStream();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
                 //log("Hello from queue: " + queueId + ", currently: " + peopleInQueue + " people in the queue.");
             } catch (ArrayIndexOutOfBounds e) {
-//          throw new RuntimeException(e);
-                log("ja pierdole wyjebalo sie");
+                throw new RuntimeException(e);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                log("Cannot connect to the API");
+            //throw new RuntimeException(e);
             }
     }
 }

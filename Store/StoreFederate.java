@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class StoreFederate extends Federate {
     public int COUNT_QUEUES = 2;
-    private final double NEW_CUSTOMER_RATE = 0.2;
+    private final double NEW_CUSTOMER_RATE = 0.1;
     private int customerCount = 0;
     private StoreAmbassador storeAmbassador;
 
